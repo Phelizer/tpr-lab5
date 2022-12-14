@@ -42,7 +42,7 @@ def rBenefit(k: int, j: int) -> float:
 
 
 def rCost(k: int, j: int) -> float:
-    return (max(column(j)) - X[k][j])/(max(column(j)) - min(column(j)))
+    return (min(column(j)) - X[k][j])/(min(column(j)) - max(column(j)))
 
 
 # WEIGHTED NORMALIZED ESTIMATIONS
@@ -82,11 +82,11 @@ def increment(lst: list[int]) -> list[int]:
     return list(map(lambda x: x + 1, lst))
 
 
-# print("Criterias to maximize:, ", increment(list(range(len(W)))))
-# print(increment(rank(list(range(len(W))))))
+print("Criterias to maximize:, ", increment(list(range(len(W)))))
+print(increment(rank(list(range(len(W))))))
 
-# print("Criterias to maximize:, ", increment(list(range(7))))
-# print(increment(rank(list(range(7)))))
+print("Criterias to maximize:, ", increment(list(range(7))))
+print(increment(rank(list(range(7)))))
 
 
 # VIKOR
@@ -175,29 +175,19 @@ def compromise(v: float):
     return result
 
 
-# print('vikor')
-# vikor(0.5)
-# print(rankByR())
-# print(rankByS())
-# print(C2(5))
-# print(list(map(lambda k: Q(k, 0.5), rankByQ(0.5))))
-# print(list(map(lambda k: R(k), rankByR())))
-# print(list(map(lambda k: S(k), rankByS())))
+# print('Vikor output:')
+# print('v =', 0.5)
+# print('ranged by Q', increment(rankByQ(0.5)))
+# print('ranged by R', increment(rankByR()))
+# print('ranged by S', increment(rankByS()))
+# print('compromise', increment(compromise(0.5)))
 
-
-print('Vikor output:')
-print('v =', 0.5)
-print('ranged by Q', increment(rankByQ(0.5)))
-print('ranged by R', increment(rankByR()))
-print('ranged by S', increment(rankByS()))
-print('compromise', increment(compromise(0.5)))
-
-print('\n')
-print('Changing v from 0 to 1:')
-for v_ in np.arange(0, 1.1, 0.1):
-    print('v =', v_)
-    print('ranged by Q', increment(rankByQ(v_)))
-    print('ranged by R', increment(rankByR()))
-    print('ranged by S', increment(rankByS()))
-    print('compromise', increment(compromise(v_)))
-    print('\n')
+# print('\n')
+# print('Changing v from 0 to 1:')
+# for v_ in np.arange(0, 1.1, 0.1):
+#     print('v =', v_)
+#     print('ranged by Q', increment(rankByQ(v_)))
+#     print('ranged by R', increment(rankByR()))
+#     print('ranged by S', increment(rankByS()))
+#     print('compromise', increment(compromise(v_)))
+#     print('\n')
