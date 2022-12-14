@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 # CRITERIA_WEIGHTS
 W = [9, 10, 3, 7, 6, 2, 5, 7, 7, 1, 10, 1]
@@ -81,8 +82,122 @@ def increment(lst: list[int]) -> list[int]:
     return list(map(lambda x: x + 1, lst))
 
 
-print("Criterias to maximize:, ", increment(list(range(len(W)))))
-print(increment(rank(list(range(len(W))))))
+# print("Criterias to maximize:, ", increment(list(range(len(W)))))
+# print(increment(rank(list(range(len(W))))))
 
-print("Criterias to maximize:, ", increment(list(range(7))))
-print(increment(rank(list(range(7)))))
+# print("Criterias to maximize:, ", increment(list(range(7))))
+# print(increment(rank(list(range(7)))))
+
+
+# VIKOR
+
+def fBest(j: int) -> float:
+    return max(column(j))
+
+
+def fWorst(j: int) -> float:
+    return min(column(j))
+
+
+def S(k: int) -> float:
+    return sum(map(lambda j: (w(j) * abs(fBest(j) - X[k][j])) / abs(fBest(j) - fWorst(j)), range(len(W))))
+
+
+def R(k: int) -> float:
+    return max(map(lambda j: (w(j) * abs(fBest(j) - X[k][j])) / abs(fBest(j) - fWorst(j)), range(len(W))))
+
+
+def SPlus() -> float:
+    return min(map(lambda k: S(k), range(len(X))))
+
+
+def SMinus() -> float:
+    return max(map(lambda k: S(k), range(len(X))))
+
+
+def RPlus() -> float:
+    return min(map(lambda k: R(k), range(len(X))))
+
+
+def RMinus() -> float:
+    return max(map(lambda k: R(k), range(len(X))))
+
+
+def Q(k: int, v: float) -> float:
+    return v*(S(k) - SPlus())/(SMinus() - SPlus()) + (1 - v)*(R(k) - RPlus())/(RMinus() - RPlus())
+
+
+def rankByQ(v: float) -> list[float]:
+    return sorted(range(len(X)), key=lambda k: Q(k, v), reverse=True)
+
+
+def rankByS() -> list[float]:
+    return sorted(range(len(X)), key=lambda k: S(k), reverse=True)
+
+
+def rankByR() -> list[float]:
+    return sorted(range(len(X)), key=lambda k: R(k), reverse=True)
+
+
+def DQ(n: int) -> float:
+    return 1/(n-1)
+
+
+def C1(kBest: int, kSecondBest: int, v: float) -> bool:
+    return Q(kSecondBest, v) - Q(kBest, v) >= DQ(len(X))
+
+
+def C2(kBest: int) -> bool:
+    return rankByS()[-1] == kBest and rankByR()[-1] == kBest
+
+
+def vikor(v: float):
+    print(rankByQ(v))
+
+
+def compromise(v: float):
+    kBest = rankByQ(v)[-1]
+    kSecondBest = rankByQ(v)[-2]
+
+    if C1(kBest, kSecondBest, v) and C2(kBest):
+        return [kBest]
+
+    if (C1(kBest, kSecondBest, v)):
+        return [kBest, kSecondBest]
+
+    result = []
+    for k in range(len(X)):
+        if Q(k, v) - Q(kBest, v) >= DQ(len(X)):
+            break
+
+        result.append(k)
+
+    return result
+
+
+# print('vikor')
+# vikor(0.5)
+# print(rankByR())
+# print(rankByS())
+# print(C2(5))
+# print(list(map(lambda k: Q(k, 0.5), rankByQ(0.5))))
+# print(list(map(lambda k: R(k), rankByR())))
+# print(list(map(lambda k: S(k), rankByS())))
+
+
+print('Vikor output:')
+print('v =', 0.5)
+print('ranged by Q', increment(rankByQ(0.5)))
+print('ranged by R', increment(rankByR()))
+print('ranged by S', increment(rankByS()))
+print('compromise', increment(compromise(0.5)))
+
+print('\n')
+print('Changing v from 0 to 1:')
+for v_ in np.arange(0, 1.1, 0.1):
+    print('v =', v_)
+    print('ranged by Q', increment(rankByQ(v_)))
+    print('ranged by R', increment(rankByR()))
+    print('ranged by S', increment(rankByS()))
+    print('compromise', increment(compromise(v_)))
+    print('\n')
