@@ -1,4 +1,3 @@
-import math
 import numpy as np
 
 # CRITERIA_WEIGHTS
@@ -27,11 +26,6 @@ def w(j: int) -> float:
     return W[j] / sum(W)
 
 
-# # NORMALIZED ESTIMATIONS
-# def r(k: int, j: int) -> float:
-#     return X[k][j]/math.sqrt(sum(map(lambda x: x ** 2, column(j))))
-
-
 def column(j: int) -> list:
     return [X[k][j] for k in range(len(X))]
 
@@ -48,8 +42,6 @@ def rCost(k: int, j: int) -> float:
 # WEIGHTED NORMALIZED ESTIMATIONS
 def v(k: int, j: int, criteriasToMaximize: list[int]) -> float:
     return w(j)*(rBenefit(k, j) if j in criteriasToMaximize else rCost(k, j))
-
-# def PIS(j: int) -> list[float]:
 
 
 def APlus(j: int, criteriasToMaximize: list[int]) -> float:
@@ -81,6 +73,8 @@ def rank(criteriasToMaximize: list[int]) -> list[int]:
 def increment(lst: list[int]) -> list[int]:
     return list(map(lambda x: x + 1, lst))
 
+
+print('Topsis output:')
 
 print("Criterias to maximize:, ", increment(list(range(len(W)))))
 print(increment(rank(list(range(len(W))))))
@@ -175,19 +169,19 @@ def compromise(v: float):
     return result
 
 
-# print('Vikor output:')
-# print('v =', 0.5)
-# print('ranged by Q', increment(rankByQ(0.5)))
-# print('ranged by R', increment(rankByR()))
-# print('ranged by S', increment(rankByS()))
-# print('compromise', increment(compromise(0.5)))
+print('Vikor output:')
+print('v =', 0.5)
+print('ranged by Q', increment(rankByQ(0.5)))
+print('ranged by R', increment(rankByR()))
+print('ranged by S', increment(rankByS()))
+print('compromise', increment(compromise(0.5)))
 
-# print('\n')
-# print('Changing v from 0 to 1:')
-# for v_ in np.arange(0, 1.1, 0.1):
-#     print('v =', v_)
-#     print('ranged by Q', increment(rankByQ(v_)))
-#     print('ranged by R', increment(rankByR()))
-#     print('ranged by S', increment(rankByS()))
-#     print('compromise', increment(compromise(v_)))
-#     print('\n')
+print('\n')
+print('Changing v from 0 to 1:')
+for v_ in np.arange(0, 1.1, 0.1):
+    print('v =', v_)
+    print('ranged by Q', increment(rankByQ(v_)))
+    print('ranged by R', increment(rankByR()))
+    print('ranged by S', increment(rankByS()))
+    print('compromise', increment(compromise(v_)))
+    print('\n')
